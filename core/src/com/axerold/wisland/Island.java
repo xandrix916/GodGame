@@ -10,11 +10,12 @@ public class Island {
     private ArrayList<Animal> animalList = new ArrayList<>();
     private static int n;
     private static double birthChance, startPoints, hungerDeBuff, foodBuff;
+    private ArrayIndexOutOfBoundsException indexBelowZero;
 
     public Island(int size, double bc, double sp, double hd, double fb)
     {
-        this.wolfMap = new Region[n][n];
         n = size;
+        this.wolfMap = new Region[n][n];
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 wolfMap[i][j] = new Region(new ArrayList<Animal>(),j,i);
@@ -44,6 +45,9 @@ public class Island {
                 wolfMap[i1][j1].add(hare);
                 animalList.add(hare);
             }
+            else{
+                i--;
+            }
         }
         for (int i = 0; i < amWolfs; i++) {
             i1 = getRandomInteger(0,n-1);
@@ -53,17 +57,38 @@ public class Island {
                 wolfMap[i1][j1].add(wolf);
                 animalList.add(wolf);
             }
+            else{
+                i--;
+            }
+
         }
     }
+
+    public int fieldIndex(Animal an, int i1, int j1)
+    {
+        Region r = wolfMap[i1][j1];
+        for (int i = 0; i < r.size(); i++) {
+            if (r.get(i) != null)
+            {
+                if (r.get(i).equals(an))
+                {
+                    return i;
+                }
+            }
+        }
+        return -1;
+    }
+
     private void moveAn(Animal an, int fromX, int fromY)
     {
         int toX = an.getX();
         int toY = an.getY();
         if (fromX != toX || fromY != toY)
         {
-            int index = wolfMap[fromY][fromX].find(an);
-            wolfMap[fromY][fromX].remove(index);
-            wolfMap[toY][toX].add(an);
+            int index = fieldIndex(an,fromY, fromX);
+            if (index != -1)
+                wolfMap[fromY][fromX].remove(index);
+                wolfMap[toY][toX].add(an);
         }
     }
     private void summonAn(Animal an)
@@ -80,14 +105,18 @@ public class Island {
 
     private void zeroAn(Animal an)
     {
-        int index = wolfMap[an.getY()][an.getX()].find(an);
-        wolfMap[an.getY()][an.getX()].remove(index);
+        //int index = wolfMap[an.getY()][an.getX()].find(an);
+        int index = fieldIndex(an,an.getY(),an.getX());
+        if (index != -1)
+            wolfMap[an.getY()][an.getX()].remove(index);
     }
     private void eatAn(Wolf w)
     {
         Hare h = new Hare(w.getX(),w.getY());
-        int index = wolfMap[w.getY()][w.getX()].find(h);
-        wolfMap[h.getY()][h.getX()].remove(index);
+        //int index = wolfMap[w.getY()][w.getX()].find(h);
+        int index = fieldIndex(h,w.getY(),w.getX());
+        if (index != -1)
+            wolfMap[h.getY()][h.getX()].remove(index);
     }
 
     public void doCycle()
@@ -130,6 +159,8 @@ public class Island {
         return n;
     }
 
+    //public int getM() {return 0;}
+
     public double getBirthChance() {
         return birthChance;
     }
@@ -150,4 +181,5 @@ public class Island {
     {
         return this.wolfMap[i1][j1];
     }
+
 }

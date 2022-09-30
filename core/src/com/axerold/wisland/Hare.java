@@ -8,8 +8,20 @@ public class Hare extends Animal{
     @Override
     public void doStep(Island island) {
         Region[] vars = makeVars(island);
-        int index = Island.getRandomInteger(0, vars.length);
+        int index = Island.getRandomInteger(0, vars.length-1);
         this.x = vars[index].getX();
         this.y = vars[index].getY();
+    }
+
+    public boolean equals(Object obj)
+    {
+        if (obj == this){
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()){
+            return false;
+        }
+        Hare hare = (Hare) obj;
+        return x == hare.x && y == hare.y;
     }
 }

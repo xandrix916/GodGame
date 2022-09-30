@@ -11,7 +11,7 @@ public class Wolf extends Animal {
     public ArrayList<Region> getHareRegions(Region[] regions){
         ArrayList<Region> hareRegions = new ArrayList<>();
         for (Region region : regions) {
-            if (region.getAnyHares()) {
+            if (region.getAmHares()>0) {
                 hareRegions.add(region);
             }
         }
@@ -21,7 +21,7 @@ public class Wolf extends Animal {
     @Override
     public boolean doEat(Island island) {
         Region r = island.getRegion(y,x);
-        if (r.getAnyHares())
+        if (r.getAmHares() > 0)
         {
             points += island.getFoodBuff();
             return true;
@@ -52,5 +52,17 @@ public class Wolf extends Animal {
 
     public double getPoints() {
         return points;
+    }
+
+    public boolean equals(Object obj)
+    {
+        if (obj == this){
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()){
+            return false;
+        }
+        Wolf wolf = (Wolf) obj;
+        return x == wolf.x && y == wolf.y && points == wolf.points;
     }
 }
