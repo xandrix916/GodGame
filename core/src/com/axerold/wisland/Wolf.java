@@ -39,12 +39,12 @@ public class Wolf extends Animal {
         int index;
         if (hareRegions.isEmpty())
         {
-            index = Island.getRandomInteger(0, vars.length);
+            index = Island.getRandomInteger(0, vars.length -1);
             this.x = vars[index].getX();
             this.y = vars[index].getY();
         }
         else{
-            index = Island.getRandomInteger(0, hareRegions.size());
+            index = Island.getRandomInteger(0, hareRegions.size()-1);
             this.x = hareRegions.get(index).getX();
             this.y = hareRegions.get(index).getY();
         }

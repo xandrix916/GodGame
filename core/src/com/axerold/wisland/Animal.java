@@ -2,6 +2,7 @@ package com.axerold.wisland;
 
 abstract public class Animal {
     protected int x, y;
+    protected boolean newborn = false;
     public Animal(int x,int y){
         this.x = x;
         this.y = y;
@@ -38,6 +39,8 @@ abstract public class Animal {
         }
         return vars;
     }
+    public void toChild() {newborn = true;}
+    public void growUp() {newborn = false;}
 
     public int getX() {
         return x;

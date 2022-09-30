@@ -60,12 +60,12 @@ public class MyGame extends ApplicationAdapter {
 			}
 		}
 		batch.end();
-		/*wolfIsland.doCycle();
+		wolfIsland.doCycle();
 		try {
 			Thread.sleep(5*1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
-		}*/
+		}
 	}
 	
 	@Override

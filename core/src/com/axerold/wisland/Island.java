@@ -41,7 +41,7 @@ public class Island {
             i1 = getRandomInteger(0,n-1);
             j1 = getRandomInteger(0,n-1);
             if (wolfMap[i1][j1].isEmpty()){
-                Hare hare = new Hare(i1,j1);
+                Hare hare = new Hare(j1,i1);
                 wolfMap[i1][j1].add(hare);
                 animalList.add(hare);
             }
@@ -53,7 +53,7 @@ public class Island {
             i1 = getRandomInteger(0,n-1);
             j1 = getRandomInteger(0,n-1);
             if (wolfMap[i1][j1].isEmpty()){
-                Wolf wolf = new Wolf(i1,j1,startPoints);
+                Wolf wolf = new Wolf(j1,i1,startPoints);
                 wolfMap[i1][j1].add(wolf);
                 animalList.add(wolf);
             }
@@ -64,7 +64,7 @@ public class Island {
         }
     }
 
-    public int fieldIndex(Animal an, int i1, int j1)
+    /*public int fieldIndex(Animal an, int i1, int j1)
     {
         Region r = wolfMap[i1][j1];
         for (int i = 0; i < r.size(); i++) {
@@ -77,7 +77,7 @@ public class Island {
             }
         }
         return -1;
-    }
+    }*/
 
     private void moveAn(Animal an, int fromX, int fromY)
     {
@@ -85,20 +85,22 @@ public class Island {
         int toY = an.getY();
         if (fromX != toX || fromY != toY)
         {
-            int index = fieldIndex(an,fromY, fromX);
-            if (index != -1)
-                wolfMap[fromY][fromX].remove(index);
-                wolfMap[toY][toX].add(an);
+            wolfMap[toY][toX].add(an);
+            wolfMap[fromY][fromX].remove(an);
         }
     }
     private void summonAn(Animal an)
     {
         if (an instanceof Hare){
-            wolfMap[an.getY()][an.getX()].add(an);
+            Hare hare = new Hare(an.getX(), an.getY());
+            wolfMap[an.getY()][an.getX()].add(hare);
+            animalList.add(hare);
         }
         if (an instanceof Wolf)
         {
-            wolfMap[an.getY()][an.getX()].add(new Wolf(an.getX(),an.getY(),startPoints));
+            Wolf wolf = new Wolf(an.getX(),an.getY(),startPoints);
+            wolfMap[an.getY()][an.getX()].add(wolf);
+            animalList.add(wolf);
         }
 
     }
@@ -106,17 +108,25 @@ public class Island {
     private void zeroAn(Animal an)
     {
         //int index = wolfMap[an.getY()][an.getX()].find(an);
-        int index = fieldIndex(an,an.getY(),an.getX());
-        if (index != -1)
-            wolfMap[an.getY()][an.getX()].remove(index);
+        //int index = fieldIndex(an,an.getY(),an.getX());
+        wolfMap[an.getY()][an.getX()].remove(an);
+        animalList.remove(an);
     }
     private void eatAn(Wolf w)
     {
-        Hare h = new Hare(w.getX(),w.getY());
         //int index = wolfMap[w.getY()][w.getX()].find(h);
-        int index = fieldIndex(h,w.getY(),w.getX());
-        if (index != -1)
-            wolfMap[h.getY()][h.getX()].remove(index);
+        /*int index = fieldIndex(h,w.getY(),w.getX());
+        if (index != -1)*/
+        Region r = wolfMap[w.getY()][w.getX()];
+        for (int i = 0; i < r.size(); i++) {
+            if (r.get(i) instanceof Hare)
+            {
+                animalList.remove(r.get(i));
+                r.remove(r.get(i));
+                return;
+            }
+        }
+           // wolfMap[h.getY()][h.getX()].remove(index);
     }
 
     public void doCycle()
@@ -125,6 +135,10 @@ public class Island {
         int anX, anY;
         for (int i = 0; i < animalList.size(); i++) {
             an = animalList.get(i);
+            if (an.newborn){
+                an.growUp();
+                continue;
+            }
             anX = an.getX();
             anY = an.getY();
             if (an instanceof Hare)
@@ -138,7 +152,7 @@ public class Island {
             }
             if (an instanceof Wolf)
             {
-                an.doStep(this);
+                an.doStep(this); //another order???
                 moveAn(an,anX,anY);
                 if (an.doEat(this))
                 {

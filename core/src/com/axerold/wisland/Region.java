@@ -5,7 +5,8 @@ import java.util.ArrayList;
 public class Region {
     private ArrayList<Animal> animals;
     private int amHares, amWolves;
-    private static int x, y;
+    private final int x;
+    private final int y;
     public Region(ArrayList<Animal> a, int x1, int y1)
     {
         x = x1;
@@ -32,21 +33,19 @@ public class Region {
             amWolves++;
         }
     }
-    public void remove(int index)
+    public void remove(Animal an)
     {
-        if (0 <= index && index < animals.size())
+        if (an instanceof Hare)
         {
-            if (animals.get(index) instanceof Hare)
-            {
-                amHares--;
-            }
-            if (animals.get(index) instanceof Wolf)
-            {
-                amWolves--;
-            }
-            animals.remove(index);
+            amHares--;
         }
+        if (an instanceof Wolf)
+        {
+            amWolves--;
+        }
+        animals.remove(an);
     }
+
     public int size()
     {
         return animals.size();
@@ -67,7 +66,7 @@ public class Region {
 
     public Animal get(int index)
     {
-        if (index > 0 && index < animals.size()) {return animals.get(index);}
+        if (index >= 0 && index < animals.size()) {return animals.get(index);}
         return null;
     }
 }
