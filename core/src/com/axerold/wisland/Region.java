@@ -3,7 +3,7 @@ package com.axerold.wisland;
 import java.util.ArrayList;
 
 public class Region {
-    private ArrayList<Animal> animals;
+    private final ArrayList<Animal> animals;
     private int amHares, amWolves;
     private final int x;
     private final int y;
@@ -49,11 +49,6 @@ public class Region {
     public int size()
     {
         return animals.size();
-    }
-
-    public int find(Animal an)
-    {
-        return animals.indexOf(an);
     }
 
     public int getX() {

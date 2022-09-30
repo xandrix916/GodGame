@@ -2,15 +2,12 @@ package com.axerold.wisland;
 
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 public class Island {
-    private Region[][] wolfMap;
-    private ArrayList<Animal> animalList = new ArrayList<>();
+    private final Region[][] wolfMap;
+    private final ArrayList<Animal> animalList = new ArrayList<>();
     private static int n;
     private static double birthChance, startPoints, hungerDeBuff, foodBuff;
-    private ArrayIndexOutOfBoundsException indexBelowZero;
 
     public Island(int size, double bc, double sp, double hd, double fb)
     {
@@ -64,21 +61,6 @@ public class Island {
         }
     }
 
-    /*public int fieldIndex(Animal an, int i1, int j1)
-    {
-        Region r = wolfMap[i1][j1];
-        for (int i = 0; i < r.size(); i++) {
-            if (r.get(i) != null)
-            {
-                if (r.get(i).equals(an))
-                {
-                    return i;
-                }
-            }
-        }
-        return -1;
-    }*/
-
     private void moveAn(Animal an, int fromX, int fromY)
     {
         int toX = an.getX();
@@ -93,12 +75,14 @@ public class Island {
     {
         if (an instanceof Hare){
             Hare hare = new Hare(an.getX(), an.getY());
+            hare.toChild();
             wolfMap[an.getY()][an.getX()].add(hare);
             animalList.add(hare);
         }
         if (an instanceof Wolf)
         {
             Wolf wolf = new Wolf(an.getX(),an.getY(),startPoints);
+            wolf.toChild();
             wolfMap[an.getY()][an.getX()].add(wolf);
             animalList.add(wolf);
         }
@@ -107,16 +91,11 @@ public class Island {
 
     private void zeroAn(Animal an)
     {
-        //int index = wolfMap[an.getY()][an.getX()].find(an);
-        //int index = fieldIndex(an,an.getY(),an.getX());
         wolfMap[an.getY()][an.getX()].remove(an);
         animalList.remove(an);
     }
     private void eatAn(Wolf w)
     {
-        //int index = wolfMap[w.getY()][w.getX()].find(h);
-        /*int index = fieldIndex(h,w.getY(),w.getX());
-        if (index != -1)*/
         Region r = wolfMap[w.getY()][w.getX()];
         for (int i = 0; i < r.size(); i++) {
             if (r.get(i) instanceof Hare)
@@ -126,7 +105,6 @@ public class Island {
                 return;
             }
         }
-           // wolfMap[h.getY()][h.getX()].remove(index);
     }
 
     public void doCycle()
@@ -175,13 +153,13 @@ public class Island {
 
     //public int getM() {return 0;}
 
-    public double getBirthChance() {
+    /*public double getBirthChance() {
         return birthChance;
     }
 
     public double getStartPoints() {
         return startPoints;
-    }
+    }*/
 
     public double getFoodBuff() {
         return foodBuff;

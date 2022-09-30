@@ -4,8 +4,6 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.utils.Timer;
 
 public class MyGame extends ApplicationAdapter {
 	SpriteBatch batch;
@@ -62,7 +60,7 @@ public class MyGame extends ApplicationAdapter {
 		batch.end();
 		wolfIsland.doCycle();
 		try {
-			Thread.sleep(5*1000);
+			Thread.sleep(/*5**/1000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
