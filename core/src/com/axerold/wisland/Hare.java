@@ -5,6 +5,10 @@ public class Hare extends Animal{
     {
         super(x,y);
     }
+    public Hare(int x, int y, Sex sex)
+    {
+        super(x,y,sex);
+    }
     @Override
     public void doStep(Island island) {
         Region[] vars = makeVars(island);

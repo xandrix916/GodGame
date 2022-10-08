@@ -7,13 +7,13 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class MyGame extends ApplicationAdapter {
 	SpriteBatch batch;
-	Texture wolf, hare, doubleWolf, doubleHare, group, hollow;
+	Texture wolf, hare, doubleWolf, doubleHare, group, hollow, male, female;
 	Island wolfIsland;
 	private static final int px = 40;
 
 	@Override
 	public void create () {
-		wolfIsland = new Island(20,0.2,1.0,0.1,0.2);
+		wolfIsland = new Island(20,0.1,0.4,0.67,0.92,1.0,0.1,0.2);
 		wolfIsland.randomFill(20, 50);
 		wolf = new Texture("40px/wolf.png");
 		hare = new Texture("40px/hare.png");
@@ -21,6 +21,8 @@ public class MyGame extends ApplicationAdapter {
 		doubleHare = new Texture("40px/haretwo.png");
 		group = new Texture("40px/group.png");
 		hollow = new Texture("40px/hollow.png");
+		male = new Texture("40px/male.png");
+		female = new Texture("40px/female.png");
 		batch = new SpriteBatch();
 	}
 
@@ -54,13 +56,23 @@ public class MyGame extends ApplicationAdapter {
 		for (int i = 0; i < wolfIsland.getN(); i++) {
 			for (int j = 0; j < wolfIsland.getN(); j++)
 			{
-				batch.draw(choose(wolfIsland.getRegion(i,j)),j*px, i*px);
+				Region r = wolfIsland.getRegion(i,j);
+				batch.draw(choose(r),j*px, i*px);
 			}
 		}
+		/*for (int i = 0; i < wolfIsland.getN(); i++) {
+			for (int j = 0; j < wolfIsland.getN(); j++) {
+				Region r = wolfIsland.getRegion(i,j);
+				if (r.getAmMales() >= 1)
+					batch.draw(male,j*px, i*px);
+				if (r.getAmFemales() >= 1)
+					batch.draw(female,j*px, i*px);
+			}
+		}*/
 		batch.end();
 		wolfIsland.doCycle();
 		try {
-			Thread.sleep(/*5**/1000);
+			Thread.sleep(/*5**/5000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
@@ -74,6 +86,8 @@ public class MyGame extends ApplicationAdapter {
 		doubleHare.dispose();
 		doubleWolf.dispose();
 		group.dispose();
+		male.dispose();
+		female.dispose();
 		hollow.dispose();
 	}
 }

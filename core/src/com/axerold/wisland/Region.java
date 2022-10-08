@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public class Region {
     private final ArrayList<Animal> animals;
     private int amHares, amWolves;
+    private int amFemales, amMales;
     private final int x;
     private final int y;
     public Region(ArrayList<Animal> a, int x1, int y1)
@@ -32,6 +33,14 @@ public class Region {
         {
             amWolves++;
         }
+        /*if (an.sex == Sex.Male)
+        {
+            amMales++;
+        }
+        if (an.sex == Sex.Female)
+        {
+            amFemales++;
+        }*/
     }
     public void remove(Animal an)
     {
@@ -43,6 +52,14 @@ public class Region {
         {
             amWolves--;
         }
+        /*if (an.sex == Sex.Male)
+        {
+            amMales--;
+        }
+        if (an.sex == Sex.Female)
+        {
+            amFemales--;
+        }*/
         animals.remove(an);
     }
 
@@ -63,5 +80,13 @@ public class Region {
     {
         if (index >= 0 && index < animals.size()) {return animals.get(index);}
         return null;
+    }
+
+    public int getAmFemales() {
+        return amFemales;
+    }
+
+    public int getAmMales() {
+        return amMales;
     }
 }

@@ -7,9 +7,12 @@ public class Island {
     private final Region[][] wolfMap;
     private final ArrayList<Animal> animalList = new ArrayList<>();
     private static int n;
-    private static double birthChance, startPoints, hungerDeBuff, foodBuff;
+    private static double startPoints, hungerDeBuff, foodBuff;
+    private static double birthChanceWolf, birthChanceHare/* ,breedChanceWolf, breedChanceHare*/;
+    private static boolean hareAI;
+    private static final Sex M = Sex.Male, F = Sex.Female;
 
-    public Island(int size, double bc, double sp, double hd, double fb)
+    public Island(int size, double bicw, double bich, double bcw, double bch, double sp, double hd, double fb)
     {
         n = size;
         this.wolfMap = new Region[n][n];
@@ -18,7 +21,10 @@ public class Island {
                 wolfMap[i][j] = new Region(new ArrayList<Animal>(),j,i);
             }
         }
-        birthChance = bc;
+        birthChanceWolf = bicw;
+        birthChanceHare = bich;
+        /*breedChanceWolf = bcw;
+        breedChanceHare = bch;*/
         startPoints = sp;
         hungerDeBuff = hd;
         foodBuff = fb;
@@ -38,7 +44,7 @@ public class Island {
             i1 = getRandomInteger(0,n-1);
             j1 = getRandomInteger(0,n-1);
             if (wolfMap[i1][j1].isEmpty()){
-                Hare hare = new Hare(j1,i1);
+                Hare hare = new Hare(j1,i1,M);
                 wolfMap[i1][j1].add(hare);
                 animalList.add(hare);
             }
@@ -50,7 +56,7 @@ public class Island {
             i1 = getRandomInteger(0,n-1);
             j1 = getRandomInteger(0,n-1);
             if (wolfMap[i1][j1].isEmpty()){
-                Wolf wolf = new Wolf(j1,i1,startPoints);
+                Wolf wolf = new Wolf(j1,i1,M,startPoints, foodBuff, hungerDeBuff);
                 wolfMap[i1][j1].add(wolf);
                 animalList.add(wolf);
             }
@@ -98,12 +104,11 @@ public class Island {
     {
         Region r = wolfMap[w.getY()][w.getX()];
         for (int i = 0; i < r.size(); i++) {
-            if (r.get(i) instanceof Hare)
-            {
+            if (w.doEat(r.get(i))){
                 animalList.remove(r.get(i));
                 r.remove(r.get(i));
                 return;
-            }
+        }
         }
     }
 
@@ -123,7 +128,7 @@ public class Island {
             {
                 an.doStep(this);
                 moveAn(an,anX,anY);
-                if (an.doBreed(birthChance))
+                if (an.doBreed(birthChanceHare))
                 {
                     summonAn(an);
                 }
@@ -132,15 +137,12 @@ public class Island {
             {
                 an.doStep(this); //another order???
                 moveAn(an,anX,anY);
-                if (an.doEat(this))
-                {
-                    eatAn((Wolf) an);
-                }
+                eatAn((Wolf) an);
                 if (((Wolf) an).getPoints() <= 0.0)
                 {
                     zeroAn(an);
                 }
-                if (an.doBreed(birthChance))
+                if (an.doBreed(birthChanceWolf))
                 {
                     summonAn(an);
                 }

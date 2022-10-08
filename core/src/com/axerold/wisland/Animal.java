@@ -2,17 +2,28 @@ package com.axerold.wisland;
 
 abstract public class Animal {
     protected int x, y;
+    //protected Sex sex = Sex.Default;
     protected boolean newborn = false;
+    protected int maxAge = 0;
     public Animal(int x,int y){
         this.x = x;
         this.y = y;
+    }
+    public Animal(int x, int y, Sex sex)
+    {
+        this.x = x;
+        this.y = y;
+        //this.sex = sex;
     }
     public void doStep(Island island){}
     public boolean doBreed(double chance){
         double breedSuccess = Island.getRandomDouble(0.0,1.0);
         return breedSuccess <= chance;
     }
-    public boolean doEat(Island island){return true;}
+    public boolean doBreed(Island island){
+        return false;
+    }
+    public boolean doEat(Animal an){return true;}
     public Region[] makeVars(Island island)
     {
         Region[] vars;
@@ -45,7 +56,6 @@ abstract public class Animal {
     public int getX() {
         return x;
     }
-
     public int getY() {
         return y;
     }

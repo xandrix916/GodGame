@@ -4,9 +4,21 @@ import java.util.ArrayList;
 
 public class Wolf extends Animal {
     private double points;
+    protected double foodBuff = 0.2, hungerDeBuff = 0.1;
+    protected final int maxAge = 15;
     public Wolf(int x, int y, double p) {
         super(x, y);
         this.points = p;
+    }
+    public Wolf(int x, int y, Sex sex, double p) {
+        super(x, y, sex);
+        this.points = p;
+    }
+    public Wolf(int x, int y, Sex sex, double p, double b, double d){
+        super(x,y,sex);
+        this.points = p;
+        this.foodBuff = b;
+        this.hungerDeBuff = d;
     }
     public ArrayList<Region> getHareRegions(Region[] regions){
         ArrayList<Region> hareRegions = new ArrayList<>();
@@ -19,8 +31,8 @@ public class Wolf extends Animal {
     }
 
     @Override
-    public boolean doEat(Island island) {
-        Region r = island.getRegion(y,x);
+    public boolean doEat(Animal an) {
+        /*Region r = island.getRegion(y,x);
         if (r.getAmHares() > 0)
         {
             points += island.getFoodBuff();
@@ -28,6 +40,15 @@ public class Wolf extends Animal {
         }
         else{
             points -= island.getHungerDeBuff();
+            return false;
+        }*/
+        if (an instanceof Hare && an.getX() == this.x && an.getY() == this.y && !an.equals(this))
+        {
+            points += foodBuff;
+            return true;
+        }
+        else{
+            points -= hungerDeBuff;
             return false;
         }
     }
