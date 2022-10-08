@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import java.util.HashMap;
+
 public class MyGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture wolf, hare, doubleWolf, doubleHare, group, hollow, male, female;
@@ -26,23 +28,25 @@ public class MyGame extends ApplicationAdapter {
 		batch = new SpriteBatch();
 	}
 
-	private Texture choose(Region r)
+	private Texture choose(int i1, int j1)
 	{
-		if (r.getAmHares() >= 1 && r.getAmWolves() >= 1) {
+		HashMap<String, Integer> stats = wolfIsland.getRegion(i1,j1);
+		int hares = stats.get("hares"), wolves = stats.get("wolves");
+		if (hares >= 1 && wolves >= 1) {
 			return group;
 		}
-		else if (r.getAmHares() >= 2){
+		else if (hares >= 2){
 			return doubleHare;
 		}
-		else if (r.getAmWolves() >= 2)
+		else if (wolves >= 2)
 		{
 			return doubleWolf;
 		}
-		else if (r.getAmHares() == 1)
+		else if (hares == 1)
 		{
 			return hare;
 		}
-		else if (r.getAmWolves() == 1)
+		else if (wolves == 1)
 		{
 			return wolf;
 		}
@@ -56,8 +60,7 @@ public class MyGame extends ApplicationAdapter {
 		for (int i = 0; i < wolfIsland.getN(); i++) {
 			for (int j = 0; j < wolfIsland.getN(); j++)
 			{
-				Region r = wolfIsland.getRegion(i,j);
-				batch.draw(choose(r),j*px, i*px);
+				batch.draw(choose(i,j),j*px, i*px);
 			}
 		}
 		/*for (int i = 0; i < wolfIsland.getN(); i++) {

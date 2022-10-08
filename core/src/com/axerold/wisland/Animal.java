@@ -1,62 +1,72 @@
 package com.axerold.wisland;
 
 abstract public class Animal {
-    protected int x, y;
+    private int x, y;
+    private int age = 0;
+    private final int SERIAL;
+    private final double TIME;
     //protected Sex sex = Sex.Default;
-    protected boolean newborn = false;
-    protected int maxAge = 0;
-    public Animal(int x,int y){
+    private static int maxAge = 42;
+    private boolean isAlive = true;
+    public Animal(int x,int y, int SERIAL, double TIME){
         this.x = x;
         this.y = y;
+        this.SERIAL = SERIAL;
+        this.TIME = TIME;
     }
-    public Animal(int x, int y, Sex sex)
+    public Animal(int x, int y, Sex sex, int serial, double TIME)
     {
         this.x = x;
         this.y = y;
         //this.sex = sex;
+        this.SERIAL = serial;
+        this.TIME = TIME;
     }
-    public void doStep(Island island){}
+    public void doStep(Region r) {
+        if (r.in(this)){
+            this.x = r.getX();
+            this.y = r.getY();
+        }
+        this.age++;
+    }
     public boolean doBreed(double chance){
         double breedSuccess = Island.getRandomDouble(0.0,1.0);
         return breedSuccess <= chance;
     }
-    public boolean doBreed(Island island){
+
+    public boolean doBreed(Animal partner){
         return false;
     }
     public boolean doEat(Animal an){return true;}
-    public Region[] makeVars(Island island)
-    {
-        Region[] vars;
-        if ((x == 0 || x == island.getN() - 1) && (y == 0 || y == island.getN() - 1)) {
-            vars = new Region[4];
-        } else if (((x == 0 || x == island.getN() - 1) && (0 < y) && (y < island.getN() - 1)) || ((y == 0 || y == island.getN() - 1) && (0 < x) && (x < island.getN() - 1))) {
-            vars = new Region[6];
+    public boolean doDie(){
+        if (age == maxAge){
+            isAlive = false;
+            return true;
         }
-        else {
-            vars = new Region[9];
-        }
-        int varsCounter = 0;
-        for (int i = y-1; i < y+2; i++) {
-            if (i>=0 && i < island.getN())
-            {
-                for (int j = x-1; j < x+2; j++) {
-                    if (j>=0 && j < island.getN())
-                    {
-                        vars[varsCounter] = island.getRegion(i,j);
-                        varsCounter++;
-                    }
-                }
-            }
-        }
-        return vars;
+        return false;
     }
-    public void toChild() {newborn = true;}
-    public void growUp() {newborn = false;}
+
+    public boolean doDie(Animal predator){
+        if (predator.x == this.x && predator.y == this.y && predator != this){
+            isAlive = false;
+            return true;
+        }
+        return false;
+    }
 
     public int getX() {
         return x;
     }
     public int getY() {
         return y;
+    }
+    public int getAge(){return age;}
+
+    public int getSERIAL() {
+        return SERIAL;
+    }
+
+    public double getTIME() {
+        return TIME;
     }
 }

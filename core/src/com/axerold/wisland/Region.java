@@ -1,6 +1,7 @@
 package com.axerold.wisland;
 
 import java.util.ArrayList;
+import java.util.concurrent.RecursiveTask;
 
 public class Region {
     private final ArrayList<Animal> animals;
@@ -80,6 +81,10 @@ public class Region {
     {
         if (index >= 0 && index < animals.size()) {return animals.get(index);}
         return null;
+    }
+
+    public boolean in(Animal an){
+        return animals.contains(an);
     }
 
     public int getAmFemales() {

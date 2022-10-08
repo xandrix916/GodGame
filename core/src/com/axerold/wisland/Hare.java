@@ -1,20 +1,13 @@
 package com.axerold.wisland;
 
 public class Hare extends Animal{
-    public Hare(int x, int y)
+    public Hare(int x, int y, int SERIAL, double TIME)
     {
-        super(x,y);
+        super(x,y, SERIAL, TIME);
     }
-    public Hare(int x, int y, Sex sex)
+    public Hare(int x, int y, Sex sex, int SERIAL, double TIME)
     {
-        super(x,y,sex);
-    }
-    @Override
-    public void doStep(Island island) {
-        Region[] vars = makeVars(island);
-        int index = Island.getRandomInteger(0, vars.length-1);
-        this.x = vars[index].getX();
-        this.y = vars[index].getY();
+        super(x,y,sex,SERIAL,TIME);
     }
 
     public boolean equals(Object obj)
@@ -26,6 +19,7 @@ public class Hare extends Animal{
             return false;
         }
         Hare hare = (Hare) obj;
-        return x == hare.x && y == hare.y;
+        return this.getX() == hare.getX() && this.getY() == hare.getY();
     }
+
 }
