@@ -7,15 +7,14 @@ import java.util.HashMap;
 public class Island {
     private final Region[][] wolfMap;
     private final ArrayList<Animal> animalList = new ArrayList<>();
+    private final Constants constants;
     private static int n;
-    private static double startPoints, hungerDeBuff, foodBuff, deltaTime = 0.5;
-    private static double birthChanceWolf, birthChanceHare/* ,breedChanceWolf, breedChanceHare*/;
     private static boolean hareAI;
     private static final Sex M = Sex.Male, F = Sex.Female;
     private int SERIAL = 0;
     private double TIME = 0.0;
 
-    public Island(int size, double bicw, double bich, double bcw, double bch, double sp, double hd, double fb)
+    public Island(int size, Constants constants)
     {
         n = size;
         this.wolfMap = new Region[n][n];
@@ -24,13 +23,7 @@ public class Island {
                 wolfMap[i][j] = new Region(new ArrayList<Animal>(),j,i);
             }
         }
-        birthChanceWolf = bicw;
-        birthChanceHare = bich;
-        /*breedChanceWolf = bcw;
-        breedChanceHare = bch;*/
-        startPoints = sp;
-        hungerDeBuff = hd;
-        foodBuff = fb;
+        this.constants = constants;
     }
     public static int getRandomInteger(double min, double max){
         return (int) ((int)(Math.random()*((max-min)+1))+min);
@@ -60,7 +53,7 @@ public class Island {
             i1 = getRandomInteger(0,n-1);
             j1 = getRandomInteger(0,n-1);
             if (wolfMap[i1][j1].isEmpty()){
-                Wolf wolf = new Wolf(j1,i1,M,startPoints, foodBuff, hungerDeBuff, SERIAL, TIME);
+                Wolf wolf = new Wolf(j1,i1,M,constants, SERIAL, TIME);
                 wolfMap[i1][j1].add(wolf);
                 animalList.add(wolf);
                 SERIAL++;
@@ -145,7 +138,7 @@ public class Island {
         }
         if (an instanceof Wolf)
         {
-            Wolf wolf = new Wolf(an.getX(),an.getY(),startPoints, SERIAL, TIME);
+            Wolf wolf = new Wolf(an.getX(),an.getY(),constants, SERIAL, TIME);
             wolfMap[an.getY()][an.getX()].add(wolf);
             animalList.add(wolf);
             SERIAL++;
@@ -171,6 +164,11 @@ public class Island {
         }
         }
     }
+    private void dieAn(Animal an){
+        if (an.doDie()){
+            zeroAn(an);
+        }
+    }
 
     public void doCycle()
     {
@@ -180,29 +178,32 @@ public class Island {
             an = animalList.get(i);
             anX = an.getX();
             anY = an.getY();
-            if (an instanceof Hare)
-            {
+            if (an.getAge() > 0 || (an.getAge() == 0 && TIME == 0)){
                 moveAn(an,anX,anY);
-                if (an.doBreed(birthChanceHare))
+                if (an instanceof Hare)
                 {
-                    summonAn(an);
+                    if (an.doBreed(constants.getBirthChanceHare()))
+                    {
+                        summonAn(an);
+                    }
                 }
+                if (an instanceof Wolf)
+                {
+                    eatAn((Wolf) an);
+                    if (((Wolf) an).getPoints() <= 0.0)
+                    {
+                        zeroAn(an);
+                    }
+                    if (an.doBreed(constants.getBirthChanceWolf()))
+                    {
+                        summonAn(an);
+                    }
+                }
+                dieAn(an);
             }
-            if (an instanceof Wolf)
-            {
-                moveAn(an,anX,anY);
-                eatAn((Wolf) an);
-                if (((Wolf) an).getPoints() <= 0.0)
-                {
-                    zeroAn(an);
-                }
-                if (an.doBreed(birthChanceWolf))
-                {
-                    summonAn(an);
-                }
-            }
+
         }
-        TIME+=deltaTime;
+        TIME+=constants.getDeltaTime();
     }
     public int getN(){
         return n;

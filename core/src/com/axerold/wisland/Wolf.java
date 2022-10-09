@@ -2,21 +2,21 @@ package com.axerold.wisland;
 
 public class Wolf extends Animal {
     private double points;
-    private double foodBuff = 0.2, hungerDeBuff = 0.1;
-    private final static int maxAge = 15;
-    public Wolf(int x, int y, double p, int SERIAL, double TIME) {
+    private double foodBuff, hungerDeBuff;
+    private static int maxAge;
+    public Wolf(int x, int y, Constants constants, int SERIAL, double TIME) {
         super(x, y,SERIAL,TIME);
-        this.points = p;
+        this.points = constants.getStartPoints();
+        this.foodBuff = constants.getFoodBuff();
+        this.hungerDeBuff = constants.getHungerDeBuff();
+        maxAge = constants.getWolfMaxAge();
     }
-    public Wolf(int x, int y, Sex sex, double p, int SERIAL, int TIME) {
-        super(x, y, sex, SERIAL,TIME);
-        this.points = p;
-    }
-    public Wolf(int x, int y, Sex sex, double p, double b, double d, int SERIAL, double TIME){
+    public Wolf(int x, int y, Sex sex, Constants constants, int SERIAL, double TIME){
         super(x,y,sex, SERIAL,TIME);
-        this.points = p;
-        this.foodBuff = b;
-        this.hungerDeBuff = d;
+        this.points = constants.getStartPoints();
+        this.foodBuff = constants.getFoodBuff();
+        this.hungerDeBuff = constants.getHungerDeBuff();
+        maxAge = constants.getWolfMaxAge();
     }
 
     @Override

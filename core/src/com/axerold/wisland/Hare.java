@@ -1,6 +1,7 @@
 package com.axerold.wisland;
 
 public class Hare extends Animal{
+    private static int maxAge = Constants.getHareMaxAge();
     public Hare(int x, int y, int SERIAL, double TIME)
     {
         super(x,y, SERIAL, TIME);
